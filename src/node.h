@@ -15,6 +15,7 @@ struct node {
     void (*notify)(struct node *, struct node *);
     void (*stabilize)(struct node *);
     void (*fix_fingers)(struct node *);
+    void (*free)(struct node *);
 };
 
 #endif // _NODE_H

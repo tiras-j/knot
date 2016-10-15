@@ -24,6 +24,7 @@ void join_local(struct node *self, struct node *peer);
 void notify_local(struct node *self, struct node *peer);
 void stabilize_local(struct node *self);
 void fix_fingers_local(struct node *self);
+void free_local(struct node *self);
 
 struct node cookie_cutter = {
     0,  // id
@@ -36,7 +37,8 @@ struct node cookie_cutter = {
     join_local,
     notify_local,
     stabilize_local,
-    fix_fingers_local
+    fix_fingers_local,
+    free_local
 };
 
 void init_empty_finger_table(struct node *n)
@@ -154,3 +156,18 @@ void fix_fingers_local(struct node *self)
     free_node(m->finger_table[idx].node);
     m->finger_table[idx].node = self->find_succ(self, m->finger_table[idx].start);
 }
+
+void free_local(struct node *self)
+{
+    struct local_meta *m = self->meta;
+    int i = 0;
+    m->pred->free(m->pred);
+    for(; i < m->table_sz; i++) {
+        if(self != m->finger_table[i].node)
+            m->finger_table[i].node->free(m->finger_table[i].node);
+    }
+    free(m->finger_table);
+    free(m);
+    free(self);
+}
+
