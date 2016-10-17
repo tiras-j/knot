@@ -26,7 +26,7 @@ void stabilize_local(struct node *self);
 void fix_fingers_local(struct node *self);
 void free_local(struct node *self);
 
-struct node cookie_cutter = {
+static struct node cookie_cutter = {
     0,  // id
     0,  // meta
     succ_local,
@@ -56,7 +56,7 @@ void init_empty_finger_table(struct node *n)
     }
 }
 
-struct node *create_local(id_t id)
+struct node *create_local(node_id_t id)
 {
     struct node *n = malloc(sizeof(*n));
     struct local_meta *m = malloc(sizeof(*m));

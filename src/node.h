@@ -1,7 +1,9 @@
 #ifndef _NODE_H
 #define _NODE_H
 
-typedef unsigned long node_id_t;
+#include <stdint.h>
+
+typedef uint64_t node_id_t;
 
 struct node {
     node_id_t id;
