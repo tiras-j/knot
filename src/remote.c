@@ -15,6 +15,12 @@ void stabilize_remote(struct node *self);
 void fix_fingers_remote(struct node *self);
 void free_remote(struct node *self);
 
+static struct remote_meta {
+    int fd;
+    char *ip;
+    char *port;
+};
+
 static struct node cookie_cutter {
     0, // id
     0, // meta
@@ -32,19 +38,24 @@ static struct node cookie_cutter {
 
 struct node *create_remote(node_id_t id, int fd)
 {
-    struct connection *c = malloc(sizeof(struct connection));
-    struct node *n = malloc(sizeof(struct node));
-    if(!c || !n) {
-        if(c) free(c);
+    struct remote_meta *m = malloc(sizeof(*m));
+    struct node *n = malloc(sizeof(*n));
+    if(!m || !n) {
+        if(m) free(m);
         if(n) free(n);
         return NULL;
     }
 
     // Copy function pointers
     memcpy(n, &cookie_cutter, sizeof(cookie_cutter));
+
+    // Set up meta object
+    m->fd = fd;
+    set_peer_name(m);
+
+    // Set node data
     n->id = id;
-    c->fd = fd;
-    n->meta = c;
+    n->meta = m;
 
     return n;
 }

@@ -32,4 +32,13 @@ int rpc_send(struct connection *c, struct rpc_message *m)
     return network_send(c);
 }
 
+struct rpc_response *rpc_recv(struct connection *c)
+{
+    struct rpc_response *r;
+    if(network_recv(c, 1))
+        return NULL;
 
+    if((r = malloc(sizeof(*r))) == NULL)
+        return NULL
+
+    

@@ -2,16 +2,21 @@
 #define _NETWORKING_H
 
 struct connection {
+    char *ip;
+    char *port;
     int fd;
-
-    char *read_buf;
-    size_t r_cap;
-    size_t r_size;
-    size_t r_pending;
-
-    char *write_buf;
-    size_t w_cap;
-    size_t w_size;
 };
+
+struct message {
+    char *data;
+    int len; // use int here for htonl compat
+};
+
+int connect_to_peer(char *addr, char *port);
+int bind_local(char *port);
+void set_peer_name(struct connection *);
+
+int send_message(struct connection *, struct message *);
+struct message *recv_message(struct connection *);
 
 #endif // _NETWORKING_H
